@@ -14,94 +14,94 @@ typedef struct {
 
 int main()
 {
-	/* -- КИРИЛЛИЦА -- */
+	/* -- РљРР РР›Р›РР¦Рђ -- */
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
     setlocale(LC_ALL, "rus");
 
-    printf("\n-- Фёдор Рыжов ИУ4-22Б. База данных. Вариант 15. --\n\n");
+    printf("\n-- Р¤С‘РґРѕСЂ Р С‹Р¶РѕРІ РРЈ4-22Р‘. Р‘Р°Р·Р° РґР°РЅРЅС‹С…. Р’Р°СЂРёР°РЅС‚ 15. --\n\n");
 
-    char tmp[128]; //переменная для временной записи
+    char tmp[128]; //РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ РІСЂРµРјРµРЅРЅРѕР№ Р·Р°РїРёСЃРё
     FILE *booksFile = fopen("books.csv", "r");
-    sBooks *booksPtr; //указатель для структуры sBooks
+    sBooks *booksPtr; //СѓРєР°Р·Р°С‚РµР»СЊ РґР»СЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ sBooks
     if (booksFile == NULL)
-        printf("Файл не удалось открыть");
+        printf("Р¤Р°Р№Р» РЅРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ");
     else {
 
-        /* -- КОЛИЧЕСТВО СТРОК -- */
-        int numberLines = 0; //счётчик количества строк
+        /* -- РљРћР›РР§Р•РЎРўР’Рћ РЎРўР РћРљ -- */
+        int numberLines = 0; //СЃС‡С‘С‚С‡РёРє РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє
 
-        /* -- ПРОВЕРКА ФАЙЛА НА ПУСТОТУ -- */
+        /* -- РџР РћР’Р•Р РљРђ Р¤РђР™Р›Рђ РќРђ РџРЈРЎРўРћРўРЈ -- */
         fseek(booksFile,0,SEEK_END);
         long pos = ftell(booksFile);
         if(pos > 0) {
-            // файл не пустой
+            // С„Р°Р№Р» РЅРµ РїСѓСЃС‚РѕР№
             rewind(booksFile);
-            while(!feof(booksFile)) { //пока не достигнут конец файла
-            if(fgetc(booksFile) == '\n') //если символ из потока перенос строки
+            while(!feof(booksFile)) { //РїРѕРєР° РЅРµ РґРѕСЃС‚РёРіРЅСѓС‚ РєРѕРЅРµС† С„Р°Р№Р»Р°
+            if(fgetc(booksFile) == '\n') //РµСЃР»Рё СЃРёРјРІРѕР» РёР· РїРѕС‚РѕРєР° РїРµСЂРµРЅРѕСЃ СЃС‚СЂРѕРєРё
                 numberLines++;
             }
             numberLines++;
             fclose(booksFile);
 
-            /* -- ЗАПИСЬ ВСЕГО ФАЙЛА В СТРУКТУРУ -- */
-            booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //память для первой структуры
-            booksFile = fopen("books.csv", "r"); //открываем файл на чтение
+            /* -- Р—РђРџРРЎР¬ Р’РЎР•Р“Рћ Р¤РђР™Р›Рђ Р’ РЎРўР РЈРљРўРЈР РЈ -- */
+            booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //РїР°РјСЏС‚СЊ РґР»СЏ РїРµСЂРІРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹
+            booksFile = fopen("books.csv", "r"); //РѕС‚РєСЂС‹РІР°РµРј С„Р°Р№Р» РЅР° С‡С‚РµРЅРёРµ
             for(int i = 0; i < numberLines; i++) {
                 if((fgets(tmp, 128, booksFile)) != NULL) {
-                    booksPtr[i].isbn = atoll(strtok(tmp, ";")); //преобразование строки в длинное целое число с разделением ";"
-                    strcpy(booksPtr[i].bookAuthor, strtok(NULL, ";")); //копирование строки из символов в атрибут структуры
+                    booksPtr[i].isbn = atoll(strtok(tmp, ";")); //РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РІ РґР»РёРЅРЅРѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ СЃ СЂР°Р·РґРµР»РµРЅРёРµРј ";"
+                    strcpy(booksPtr[i].bookAuthor, strtok(NULL, ";")); //РєРѕРїРёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РёР· СЃРёРјРІРѕР»РѕРІ РІ Р°С‚СЂРёР±СѓС‚ СЃС‚СЂСѓРєС‚СѓСЂС‹
                     strcpy(booksPtr[i].bookTitle, strtok(NULL, ";"));
                     booksPtr[i].allBooks = atoi(strtok(NULL, ";"));
                     booksPtr[i].usedBooks = atoi(strtok(NULL, "\n"));
-                    booksPtr = (sBooks *)realloc(booksPtr, (i+2)*sizeof(sBooks)); //увеличиваем размер блока памяти
+                    booksPtr = (sBooks *)realloc(booksPtr, (i+2)*sizeof(sBooks)); //СѓРІРµР»РёС‡РёРІР°РµРј СЂР°Р·РјРµСЂ Р±Р»РѕРєР° РїР°РјСЏС‚Рё
                 }
             }
             fclose(booksFile);
         }
         else {
-			// файл пустой
-            numberLines = 0; //строк нет
-            booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //память для первой структуры
+			// С„Р°Р№Р» РїСѓСЃС‚РѕР№
+            numberLines = 0; //СЃС‚СЂРѕРє РЅРµС‚
+            booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //РїР°РјСЏС‚СЊ РґР»СЏ РїРµСЂРІРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹
         }
 
-		/* -- СПИСОК ВСЕХ ФАЙЛОВ -- */
-        printf("Количество строк в документе %d\n", numberLines);
+		/* -- РЎРџРРЎРћРљ Р’РЎР•РҐ Р¤РђР™Р›РћР’ -- */
+        printf("РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ РґРѕРєСѓРјРµРЅС‚Рµ %d\n", numberLines);
         for(int i = 0; i < numberLines; i++) {
             printf(">>> %llu;%s;%s;%d;%d\n", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
         }
 
-		/* -- МЕНЮ КОМАНД -- */
-        printf("\nКоманды:\n");
-        printf("1 - Добавить новую книгу\n");
-        printf("2 - Удалить книгу по номеру ISBN\n");
-        printf("7 - Выдать книгу студенту по номеру ISBN\n");
-        printf("8 - Принять книгу от студента по номеру ISBN\n");
-        printf("12 - Завершить работу программы\n");
-        printf("13 - Вывести список\n");
+		/* -- РњР•РќР® РљРћРњРђРќР” -- */
+        printf("\nРљРѕРјР°РЅРґС‹:\n");
+        printf("1 - Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІСѓСЋ РєРЅРёРіСѓ\n");
+        printf("2 - РЈРґР°Р»РёС‚СЊ РєРЅРёРіСѓ РїРѕ РЅРѕРјРµСЂСѓ ISBN\n");
+        printf("7 - Р’С‹РґР°С‚СЊ РєРЅРёРіСѓ СЃС‚СѓРґРµРЅС‚Сѓ РїРѕ РЅРѕРјРµСЂСѓ ISBN\n");
+        printf("8 - РџСЂРёРЅСЏС‚СЊ РєРЅРёРіСѓ РѕС‚ СЃС‚СѓРґРµРЅС‚Р° РїРѕ РЅРѕРјРµСЂСѓ ISBN\n");
+        printf("12 - Р—Р°РІРµСЂС€РёС‚СЊ СЂР°Р±РѕС‚Сѓ РїСЂРѕРіСЂР°РјРјС‹\n");
+        printf("13 - Р’С‹РІРµСЃС‚Рё СЃРїРёСЃРѕРє\n");
 
-        /* -- РАБОТА С КОМАНДАМИ -- */
+        /* -- Р РђР‘РћРўРђ РЎ РљРћРњРђРќР”РђРњР -- */
         int command;
         while(1) {
             away:
-            printf("\nВведите команду: ");
+            printf("\nР’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ: ");
             scanf("%d", &command);
 
-            /* -- ДОБАВЛЕНИЕ НОВОЙ КНИГИ -- */
+            /* -- Р”РћР‘РђР’Р›Р•РќРР• РќРћР’РћР™ РљРќРР“Р -- */
             if(command == 1) {
-				//проверка ISBN
-                printf("\nВведите ISBN: ");
+				//РїСЂРѕРІРµСЂРєР° ISBN
+                printf("\nР’РІРµРґРёС‚Рµ ISBN: ");
                 unsigned long long ISBN;
                 scanf("%lld", &ISBN);
                 for(int i = 0; i < numberLines; i++) {
                     if(booksPtr[i].isbn == ISBN) {
-                        printf("Такая книга уже есть!\n");
+                        printf("РўР°РєР°СЏ РєРЅРёРіР° СѓР¶Рµ РµСЃС‚СЊ!\n");
                         goto away;
                     }
                 }
-				//считывание автора
+				//СЃС‡РёС‚С‹РІР°РЅРёРµ Р°РІС‚РѕСЂР°
                 char c = getchar();
-                printf("Введите автора: ");
+                printf("Р’РІРµРґРёС‚Рµ Р°РІС‚РѕСЂР°: ");
                 int j = 0;
                 char author[64];
                 while((c = getchar()) != '\n') {
@@ -109,8 +109,8 @@ int main()
                     j++;
                 }
                 author[j] = '\0';
-				//считывание названия книги
-                printf("Введите название книги: ");
+				//СЃС‡РёС‚С‹РІР°РЅРёРµ РЅР°Р·РІР°РЅРёСЏ РєРЅРёРіРё
+                printf("Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ РєРЅРёРіРё: ");
                 j = 0;
                 char title[64];
                 while((c = getchar()) != '\n') {
@@ -118,14 +118,14 @@ int main()
                     j++;
                 }
                 title[j] = '\0';
-				//количество книг
-                printf("Сколько книг добавить? ");
+				//РєРѕР»РёС‡РµСЃС‚РІРѕ РєРЅРёРі
+                printf("РЎРєРѕР»СЊРєРѕ РєРЅРёРі РґРѕР±Р°РІРёС‚СЊ? ");
                 int numBooks;
                 scanf("%d", &numBooks);
 
-				//выделение доп памяти для структуры
+				//РІС‹РґРµР»РµРЅРёРµ РґРѕРї РїР°РјСЏС‚Рё РґР»СЏ СЃС‚СЂСѓРєС‚СѓСЂС‹
                 booksPtr = (sBooks *)realloc(booksPtr, (numberLines+1)*sizeof(sBooks));
-				/* Сохраняем всё в структуру */
+				/* РЎРѕС…СЂР°РЅСЏРµРј РІСЃС‘ РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ */
                 booksPtr[numberLines].isbn = ISBN;
                     //printf("%llu\n", booksPtr[numberLines].isbn);
                 strcpy(booksPtr[numberLines].bookAuthor, author);
@@ -142,8 +142,8 @@ int main()
                     printf("\n>>> %llu;%s;%s;%d;%d", booksPtr[j].isbn, booksPtr[j].bookAuthor, booksPtr[j].bookTitle, booksPtr[j].allBooks, booksPtr[j].usedBooks);
                 }
 				
-				/* Сохранение всех данных из структуры в файл */
-                booksFile = fopen("books.csv", "w"); //по сути перезаписываем весь файл
+				/* РЎРѕС…СЂР°РЅРµРЅРёРµ РІСЃРµС… РґР°РЅРЅС‹С… РёР· СЃС‚СЂСѓРєС‚СѓСЂС‹ РІ С„Р°Р№Р» */
+                booksFile = fopen("books.csv", "w"); //РїРѕ СЃСѓС‚Рё РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµРј РІРµСЃСЊ С„Р°Р№Р»
                 for(int i = 0; i < numberLines; i++) {
                     fprintf(booksFile, "%llu;%s;%s;%d;%d", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
                     if(i != numberLines-1)
@@ -151,29 +151,29 @@ int main()
                 }
                 fclose(booksFile);
 
-                printf("\nКнига успешно добавлена!\n");
+                printf("\nРљРЅРёРіР° СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅР°!\n");
                 command = 0;
                 //goto away;
             }
 
-            /* -- СОХРАНЕНИЕ ФАЙЛА -- */
+            /* -- РЎРћРҐР РђРќР•РќРР• Р¤РђР™Р›Рђ -- */
             if(command == 12) {
-                booksFile = fopen("books.csv", "w"); //по сути перезаписываем весь файл
+                booksFile = fopen("books.csv", "w"); //РїРѕ СЃСѓС‚Рё РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµРј РІРµСЃСЊ С„Р°Р№Р»
                 for(int i = 0; i < numberLines; i++) {
                     fprintf(booksFile, "%llu;%s;%s;%d;%d", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
                     if(i != numberLines-1)
                         fprintf(booksFile, "\n");
                 }
                 fclose(booksFile);
-				free(booksPtr); //очистка памяти
-                printf("Файл успешно сохранён! Работа с программой завершена\n");
+				free(booksPtr); //РѕС‡РёСЃС‚РєР° РїР°РјСЏС‚Рё
+                printf("Р¤Р°Р№Р» СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅС‘РЅ! Р Р°Р±РѕС‚Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№ Р·Р°РІРµСЂС€РµРЅР°\n");
                 command = 0;
                 goto end;
             }
 
-            /* -- УДАЛЕНИЕ КНИГИ -- */
+            /* -- РЈР”РђР›Р•РќРР• РљРќРР“Р -- */
             if(command == 2) {
-                printf("\nВведите ISBN: ");
+                printf("\nР’РІРµРґРёС‚Рµ ISBN: ");
                 unsigned long long ISBN;
                 scanf("%llu", &ISBN);
                 //printf("%d\n", ISBN);
@@ -186,26 +186,26 @@ int main()
                 }
 
                 if(position == -1) {
-                    printf("\nКнига не найдена!\n");
+                    printf("\nРљРЅРёРіР° РЅРµ РЅР°Р№РґРµРЅР°!\n");
                     goto away;
                 }
 
                 int k = position+1;
                 //printf("%d %d", position+1, numberLines);
-                printf("\nУдаление строки № %d \n", k);
+                printf("\nРЈРґР°Р»РµРЅРёРµ СЃС‚СЂРѕРєРё в„– %d \n", k);
 
-                /* Сохраняем файл */
+                /* РЎРѕС…СЂР°РЅСЏРµРј С„Р°Р№Р» */
                 if(booksPtr[position].isbn == 0) {
                     booksFile = fopen("books.csv", "w");
                     for(int i = 0; i < numberLines; i++) {
                         if(booksPtr[i].isbn == 0) {
-                            //printf("\nКнига удалена!");
+                            //printf("\nРљРЅРёРіР° СѓРґР°Р»РµРЅР°!");
                             continue;
                         }
                         else {
                             fprintf(booksFile, "%llu;%s;%s;%d;%d", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
                             if(i != numberLines-1) {
-                                if(position == numberLines-1 && i == position-1) //если удаляем последнюю строку, то без \n
+                                if(position == numberLines-1 && i == position-1) //РµСЃР»Рё СѓРґР°Р»СЏРµРј РїРѕСЃР»РµРґРЅСЋСЋ СЃС‚СЂРѕРєСѓ, С‚Рѕ Р±РµР· \n
                                     printf(booksFile, "");
                                 else
                                     fprintf(booksFile, "\n");
@@ -213,21 +213,21 @@ int main()
                         }
                     }
                     numberLines--;
-                    printf("\nКнига удалена!\n");
+                    printf("\nРљРЅРёРіР° СѓРґР°Р»РµРЅР°!\n");
                     fclose(booksFile);
                 }
 
-                /* Перезапись файла в структуру*/
-                booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //память для первой структуры
+                /* РџРµСЂРµР·Р°РїРёСЃСЊ С„Р°Р№Р»Р° РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ*/
+                booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //РїР°РјСЏС‚СЊ РґР»СЏ РїРµСЂРІРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹
                 booksFile = fopen("books.csv", "r");
                 for(int i = 0; i < numberLines; i++) {
                     if((fgets(tmp, 128, booksFile)) != NULL) {
-                        booksPtr[i].isbn = atoll(strtok(tmp, ";")); //преобразование строки в длинное целое число с разделением ;
-                        strcpy(booksPtr[i].bookAuthor, strtok(NULL, ";")); //копирование строки из символов в атрибут структуры
+                        booksPtr[i].isbn = atoll(strtok(tmp, ";")); //РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РІ РґР»РёРЅРЅРѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ СЃ СЂР°Р·РґРµР»РµРЅРёРµРј ;
+                        strcpy(booksPtr[i].bookAuthor, strtok(NULL, ";")); //РєРѕРїРёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РёР· СЃРёРјРІРѕР»РѕРІ РІ Р°С‚СЂРёР±СѓС‚ СЃС‚СЂСѓРєС‚СѓСЂС‹
                         strcpy(booksPtr[i].bookTitle, strtok(NULL, ";"));
                         booksPtr[i].allBooks = atoi(strtok(NULL, ";"));
                         booksPtr[i].usedBooks = atoi(strtok(NULL, "\n"));
-                        booksPtr = (sBooks *)realloc(booksPtr, (i+2)*sizeof(sBooks)); //увеличиваем размер блока памяти
+                        booksPtr = (sBooks *)realloc(booksPtr, (i+2)*sizeof(sBooks)); //СѓРІРµР»РёС‡РёРІР°РµРј СЂР°Р·РјРµСЂ Р±Р»РѕРєР° РїР°РјСЏС‚Рё
                     }
                 }
                 fclose(booksFile);
@@ -236,18 +236,18 @@ int main()
                 //goto away;
             }
 
-            /* -- ВЕСЬ СПИСОК -- */
+            /* -- Р’Р•РЎР¬ РЎРџРРЎРћРљ -- */
             if(command == 13) {
-                printf("\nКоличество строк в документе %d\n", numberLines);
+                printf("\nРљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ РґРѕРєСѓРјРµРЅС‚Рµ %d\n", numberLines);
                 for(int i = 0; i < numberLines; i++) {
                     printf(">>> %llu;%s;%s;%d;%d\n", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
                 }
                 command = 0;
             }
 
-            /* -- ВЫДАТЬ КНИГУ ПО НОМЕРУ ISBN -- */
+            /* -- Р’Р«Р”РђРўР¬ РљРќРР“РЈ РџРћ РќРћРњР•Р РЈ ISBN -- */
             if(command == 7) {
-                printf("\nВведите ISBN: ");
+                printf("\nР’РІРµРґРёС‚Рµ ISBN: ");
                 unsigned long long ISBN;
                 scanf("%llu", &ISBN);
                 int position = -1;
@@ -257,21 +257,21 @@ int main()
                     }
                 }
                 if(position == -1) {
-                    printf("\nКнига не найдена!\n");
+                    printf("\nРљРЅРёРіР° РЅРµ РЅР°Р№РґРµРЅР°!\n");
                     goto away;
                 }
                 if(booksPtr[position].usedBooks == 0)
-                    printf("\nДоступных книг нет!\n");
+                    printf("\nР”РѕСЃС‚СѓРїРЅС‹С… РєРЅРёРі РЅРµС‚!\n");
                 else {
                     booksPtr[position].usedBooks--;
-                    printf("\nКнига выдана!\n");
+                    printf("\nРљРЅРёРіР° РІС‹РґР°РЅР°!\n");
                 }
                 command = 0;
             }
 
-            /* -- ПРИНЯТЬ КНИГУ ПО ISBN -- */
+            /* -- РџР РРќРЇРўР¬ РљРќРР“РЈ РџРћ ISBN -- */
             if(command == 8) {
-                printf("\nВведите ISBN: ");
+                printf("\nР’РІРµРґРёС‚Рµ ISBN: ");
                 unsigned long long ISBN;
                 scanf("%llu", &ISBN);
                 int position = -1;
@@ -281,14 +281,14 @@ int main()
                     }
                 }
                 if(position == -1) {
-                    printf("\nКнига не найдена!\n");
+                    printf("\nРљРЅРёРіР° РЅРµ РЅР°Р№РґРµРЅР°!\n");
                     goto away;
                 }
                 if(booksPtr[position].usedBooks == booksPtr[position].allBooks)
-                    printf("\nКоличество доступных книг равно количеству книг в библиотеке\n");
+                    printf("\nРљРѕР»РёС‡РµСЃС‚РІРѕ РґРѕСЃС‚СѓРїРЅС‹С… РєРЅРёРі СЂР°РІРЅРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ РєРЅРёРі РІ Р±РёР±Р»РёРѕС‚РµРєРµ\n");
                 else {
                     booksPtr[position].allBooks++;
-                    printf("\nКнига принята!\n");
+                    printf("\nРљРЅРёРіР° РїСЂРёРЅСЏС‚Р°!\n");
                 }
                 command = 0;
             }
