@@ -14,18 +14,20 @@ typedef struct {
 
 int main()
 {
+	/* -- КИРИЛЛИЦА -- */
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
     setlocale(LC_ALL, "rus");
 
-    printf("-- Фёдор Рыжов ИУ4-22Б. База данных. Вариант 15. --\n\n");
+    printf("\n-- Фёдор Рыжов ИУ4-22Б. База данных. Вариант 15. --\n\n");
 
-    char tmp[128];
+    char tmp[128]; //переменная для временной записи
     FILE *booksFile = fopen("books.csv", "r");
     sBooks *booksPtr; //указатель для структуры sBooks
     if (booksFile == NULL)
         printf("Файл не удалось открыть");
     else {
+
         /* -- КОЛИЧЕСТВО СТРОК -- */
         int numberLines = 0; //счётчик количества строк
 
@@ -43,12 +45,11 @@ int main()
             fclose(booksFile);
 
             /* -- ЗАПИСЬ ВСЕГО ФАЙЛА В СТРУКТУРУ -- */
-
             booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //память для первой структуры
-            booksFile = fopen("books.csv", "r");
+            booksFile = fopen("books.csv", "r"); //открываем файл на чтение
             for(int i = 0; i < numberLines; i++) {
                 if((fgets(tmp, 128, booksFile)) != NULL) {
-                    booksPtr[i].isbn = atoll(strtok(tmp, ";")); //преобразование строки в длинное целое число с разделением ;
+                    booksPtr[i].isbn = atoll(strtok(tmp, ";")); //преобразование строки в длинное целое число с разделением ";"
                     strcpy(booksPtr[i].bookAuthor, strtok(NULL, ";")); //копирование строки из символов в атрибут структуры
                     strcpy(booksPtr[i].bookTitle, strtok(NULL, ";"));
                     booksPtr[i].allBooks = atoi(strtok(NULL, ";"));
@@ -59,15 +60,18 @@ int main()
             fclose(booksFile);
         }
         else {
-            numberLines = 0;
+			// файл пустой
+            numberLines = 0; //строк нет
             booksPtr = (sBooks *)malloc(1*sizeof(sBooks)); //память для первой структуры
         }
 
+		/* -- СПИСОК ВСЕХ ФАЙЛОВ -- */
         printf("Количество строк в документе %d\n", numberLines);
         for(int i = 0; i < numberLines; i++) {
             printf(">>> %llu;%s;%s;%d;%d\n", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
         }
 
+		/* -- МЕНЮ КОМАНД -- */
         printf("\nКоманды:\n");
         printf("1 - Добавить новую книгу\n");
         printf("2 - Удалить книгу по номеру ISBN\n");
@@ -76,7 +80,7 @@ int main()
         printf("12 - Завершить работу программы\n");
         printf("13 - Вывести список\n");
 
-        /* -- РАБОТА С КОММАНДАМИ -- */
+        /* -- РАБОТА С КОМАНДАМИ -- */
         int command;
         while(1) {
             away:
@@ -84,8 +88,8 @@ int main()
             scanf("%d", &command);
 
             /* -- ДОБАВЛЕНИЕ НОВОЙ КНИГИ -- */
-            if(command == 1) { //добавление новой книги
-
+            if(command == 1) {
+				//проверка ISBN
                 printf("\nВведите ISBN: ");
                 unsigned long long ISBN;
                 scanf("%lld", &ISBN);
@@ -95,7 +99,7 @@ int main()
                         goto away;
                     }
                 }
-
+				//считывание автора
                 char c = getchar();
                 printf("Введите автора: ");
                 int j = 0;
@@ -105,8 +109,7 @@ int main()
                     j++;
                 }
                 author[j] = '\0';
-
-
+				//считывание названия книги
                 printf("Введите название книги: ");
                 j = 0;
                 char title[64];
@@ -115,12 +118,14 @@ int main()
                     j++;
                 }
                 title[j] = '\0';
-
+				//количество книг
                 printf("Сколько книг добавить? ");
                 int numBooks;
                 scanf("%d", &numBooks);
 
+				//выделение доп памяти для структуры
                 booksPtr = (sBooks *)realloc(booksPtr, (numberLines+1)*sizeof(sBooks));
+				/* Сохраняем всё в структуру */
                 booksPtr[numberLines].isbn = ISBN;
                     //printf("%llu\n", booksPtr[numberLines].isbn);
                 strcpy(booksPtr[numberLines].bookAuthor, author);
@@ -130,13 +135,14 @@ int main()
                 booksPtr[numberLines].allBooks = numBooks;
                     //printf("%d\n", booksPtr[numberLines].allBooks);
                 booksPtr[numberLines].usedBooks = numBooks;
-                booksPtr = (sBooks *)realloc(booksPtr, (numberLines+1)*sizeof(sBooks));
+                //booksPtr = (sBooks *)realloc(booksPtr, (numberLines+1)*sizeof(sBooks));
                 numberLines++;
 
                 for(int j = numberLines-1; j < numberLines; j++) {
                     printf("\n>>> %llu;%s;%s;%d;%d", booksPtr[j].isbn, booksPtr[j].bookAuthor, booksPtr[j].bookTitle, booksPtr[j].allBooks, booksPtr[j].usedBooks);
                 }
-
+				
+				/* Сохранение всех данных из структуры в файл */
                 booksFile = fopen("books.csv", "w"); //по сути перезаписываем весь файл
                 for(int i = 0; i < numberLines; i++) {
                     fprintf(booksFile, "%llu;%s;%s;%d;%d", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
@@ -159,6 +165,7 @@ int main()
                         fprintf(booksFile, "\n");
                 }
                 fclose(booksFile);
+				free(booksPtr); //очистка памяти
                 printf("Файл успешно сохранён! Работа с программой завершена\n");
                 command = 0;
                 goto end;
@@ -198,7 +205,7 @@ int main()
                         else {
                             fprintf(booksFile, "%llu;%s;%s;%d;%d", booksPtr[i].isbn, booksPtr[i].bookAuthor, booksPtr[i].bookTitle, booksPtr[i].allBooks, booksPtr[i].usedBooks);
                             if(i != numberLines-1) {
-                                if(position == numberLines-1 && i == position-1)
+                                if(position == numberLines-1 && i == position-1) //если удаляем последнюю строку, то без \n
                                     printf(booksFile, "");
                                 else
                                     fprintf(booksFile, "\n");
